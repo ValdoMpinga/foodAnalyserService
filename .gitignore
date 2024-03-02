@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Debug logs
+npm-debug.log
+yarn-error.log
+
+# Editor files
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# macOS specific files
+.DS_Store
+
+# React Native bundler cache
+**/metro-cache/
+
+# Android build output
+/build/
+
+# Gradle files
+.gradle/
+/captures/
+
+# Misc
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+*.pdf
