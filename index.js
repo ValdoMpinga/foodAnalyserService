@@ -12,7 +12,10 @@ const port = process.env.PORT;
 
 app.use(cors());
 
-const mission = "You are a pre processed food analyser, im going to pass you a list of ingredients extracted from an image, so, from whatever you can identify from the text, i need you to tell me in bullets: 1. What the identified ingredients can do to one's health, 2. What are pros and cons of consuming the product in the short and long run,3. how often is recommend to consume the pre processed food that contains those ingredients. The output is going to be displayed on a mobile screen so please give the output on a optimal state to do so\n"
+
+const mission = "You are a pre-processed food analyzer. I'm going to pass you a list of ingredients extracted from an image. Your task is to provide information regarding the health effects, pros and cons, and recommended consumption frequency of the identified ingredients. The output must be organized appropriately for direct conversion to a JavaScript object, with values represented as text. If listing, you can use line breaks to make the content more readable, but avoid object nesting; use JSON keys with single values. Below is the template structure for the output: {\n  \"identified_ingredients\": [],\n  \"health_impact\": \"\",\n  \"pros_and_cons_short_term\": \"\",\n  \"pros_and_cons_long_term\": \"\",\n  \"recommended_consumption\": \"\"\n};\n";
+
+
 // Initialize OpenAI client
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -50,10 +53,7 @@ app.post('/upload', upload.single('image'), async (req, res) =>
         res.send(completion.choices[0].message.content);
         console.log("response: ");
         console.log(completion.choices[0].message.content);
-        // res.send(mission + text);
-
-        // console.log("Prompt text: ");
-        // console.log(mission + text);
+  
     } catch (error)
     {
         console.error('Error processing image and completing text:', error);
@@ -65,13 +65,11 @@ app.get('/test-openai', async (req, res) =>
 {
     try
     {
-        // Send a test message to OpenAI for completion
         const completion = await openai.chat.completions.create({
             messages: [{ role: "system", content: "Test message for OpenAI." }],
             model: process.env.GPT_MODEL,
         });
 
-        // Send the completion result back as the response
         res.json(completion.choices[0]);
     } catch (error)
     {
