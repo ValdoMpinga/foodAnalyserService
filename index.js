@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const Tesseract = require('tesseract.js');
 const OpenAI = require('openai');
+const fs = require('fs');
 
 require('dotenv').config();
 
@@ -15,8 +16,6 @@ app.use(cors());
 
 const mission = "You are a pre-processed food analyzer. I'm going to pass you a list of ingredients extracted from an image. Your task is to provide information regarding the health effects, pros and cons, and recommended consumption frequency of the identified ingredients. The output must be organized appropriately for direct conversion to a JavaScript object, with values represented as text. If listing, you can use line breaks to make the content more readable, but avoid object nesting; use JSON keys with single values. Below is the template structure for the output: {\n  \"identified_ingredients\": [],\n  \"health_impact\": \"\",\n  \"pros_and_cons_short_term\": \"\",\n  \"pros_and_cons_long_term\": \"\",\n  \"recommended_consumption\": \"\"\n};\n";
 
-
-// Initialize OpenAI client
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const storage = multer.diskStorage({
@@ -38,7 +37,6 @@ app.post('/upload', upload.single('image'), async (req, res) =>
     {
         const imagePath = req.file.path;
 
-        // Extract text from image using Tesseract.js
         const result = await Tesseract.recognize(imagePath, 'por', {
             logger: m => console.log(m)
         });
@@ -51,9 +49,19 @@ app.post('/upload', upload.single('image'), async (req, res) =>
         });
 
         res.send(completion.choices[0].message.content);
-        console.log("response: ");
+        console.log("GPT response bellow: ");
         console.log(completion.choices[0].message.content);
-  
+
+        fs.unlink(imagePath, (err) =>
+        {
+            if (err)
+            {
+                console.error('Error deleting file:', err);
+            } else
+            {
+                console.log('File deleted successfully');
+            }
+        });
     } catch (error)
     {
         console.error('Error processing image and completing text:', error);
