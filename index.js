@@ -14,7 +14,7 @@ const port = process.env.PORT;
 app.use(cors());
 
 
-const mission = "You are a pre-processed food analyzer. I'm going to pass you a list of ingredients extracted from an image. Your task is to provide information regarding the health effects, pros and cons, and recommended consumption frequency of the identified ingredients. The output must be organized appropriately for direct conversion to a JavaScript object, with values represented as text. If listing, you can use line breaks to make the content more readable, but avoid object nesting; use JSON keys with single values. Below is the template structure for the output: {\n  \"identified_ingredients\": [],\n  \"health_impact\": \"\",\n  \"pros_and_cons_short_term\": \"\",\n  \"pros_and_cons_long_term\": \"\",\n  \"recommended_consumption\": \"\"\n};\n";
+const mission = "You are a pre-processed food analyzer. I'm going to pass you a list of ingredients extracted from an image. Your task is to provide information regarding the health effects, pros and cons, and recommended consumption frequency of the product itself, which contains the identified ingredients. The output must be organized appropriately for direct conversion to a JavaScript object, with values represented as text. If listing, you can use line breaks to make the content more readable, but avoid object nesting; use JSON keys with single values. Below is the template structure for the output: {\n  \"identified_ingredients\": [],\n  \"health_impact\": \"\",\n  \"pros_and_cons_short_term\": \"\",\n  \"pros_and_cons_long_term\": \"\",\n  \"recommended_consumption\": \"\"\n};\n ";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
